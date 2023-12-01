@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = 3001;
+let token = null;
 
 app.use(cors());
 app.use(express.json());
@@ -59,7 +60,7 @@ app.post('/api/login', async (req, res) => {
                 if(data[count].password == password)
                 {
                    // request.session.user_id = data[count].user_id;
-                    const token = jwt.sign({ userId: user.user_id, username: user.user_name }, 'secret', { expiresIn: '1h' });
+                    token = jwt.sign({ userId: user.user_id, username: user.user_name }, 'secret', { expiresIn: '1h' });
 
                     res.json({ token });
                 } 
@@ -98,13 +99,31 @@ app.get('/api/movies/:movieId', async (req, res) => {
         
         db.query(rquery, function(error, reviewData) {
           reviews = reviewData
-          console.log("Found reviews")
+          //console.log("Found reviews")
           res.json({movie, reviews});
         })
       }
     });
   });
 
+//Controller of movie review submission
+app.post('/api/movies/:movieId/submit-review', async (req, res) => {
+  const movieId = req.params.movieId;
+  const { reviewText } = req.body;
+  jwt.verify(token, 'secret', (err, decoded) => {
+    if (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+    const userId = decoded.userId;
+    const reviewQuery = "INSERT INTO review (UID, MID, RID, Description, approved) VALUES (?, ?, ?, ?, ?)";
+        db.query(reviewQuery, [userId, movieId, Math.floor(Math.random() * ( 90000 -  10000 + 1) + 10000) + 10000
+           , reviewText, false], (error, result) => {
+            if (error) {
+                return res.status(500).json({ error: 'Error submitting review' })  
+            }
+          })
+    })
+  });
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
