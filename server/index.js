@@ -78,6 +78,18 @@ app.post('/api/login', async (req, res) => {
 
 });
 
+app.get('/api/actor/:actorId', async (req, res) => {
+  const aID = req.params.actorId;
+  const query = 'SELECT * FROM crew_actor WHERE CID = ?';
+  
+  db.query(query, [aID], function(error, aData) {
+    if (aData && aData.length > 0){
+      const actor = aData[0];
+      res.json({ actor });
+    }
+  });
+});
+
 // API endpoint to get movie data
 app.get('/api/movies', async (req, res) => {
     query = 'SELECT mid, title, poster_url, year FROM movie'
@@ -91,16 +103,24 @@ app.get('/api/movies', async (req, res) => {
 app.get('/api/movies/:movieId', async (req, res) => {
     movieId = req.params.movieId;
     reviews = null;
+    cast = null;
     query = `SELECT * FROM movie WHERE mid = "${movieId}" `;
+
     db.query(query, function(error, data) {
       if (data && data.length > 0){
         movie = data[0]
+        
+        cquery = `SELECT * FROM movie_char WHERE mid = "${movieId}"`;
+        db.query(cquery, function(error, castData) {
+          cast = castData
+        })
+
         rquery = `SELECT * FROM review WHERE review.MID = "${movieId}" `;
         
         db.query(rquery, function(error, reviewData) {
           reviews = reviewData
           //console.log("Found reviews")
-          res.json({movie, reviews});
+          res.json({movie, reviews, cast});
         })
       }
     });
