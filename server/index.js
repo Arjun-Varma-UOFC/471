@@ -90,6 +90,19 @@ app.get('/api/actor/:actorId', async (req, res) => {
   });
 });
 
+app.get('/api/ost/:ostId', async (req, res) => {
+  const ostId = req.params.ostId;
+  const query = `SELECT * FROM movie_soundtrack WHERE ostId = "${ostId}" `;
+  
+  db.query(query, function(error, data) {
+    if (data && data.length > 0){
+      console.log("Found soundtrack");
+      ost = data[0];
+      res.json({ ost });
+    }
+  });
+});
+
 // API endpoint to get movie data
 app.get('/api/movies', async (req, res) => {
     query = 'SELECT mid, title, poster_url, year FROM movie'
@@ -104,6 +117,8 @@ app.get('/api/movies/:movieId', async (req, res) => {
     movieId = req.params.movieId;
     reviews = null;
     cast = null;
+    ost = null;
+    shows = null;
     query = `SELECT * FROM movie WHERE mid = "${movieId}" `;
 
     db.query(query, function(error, data) {
@@ -119,12 +134,40 @@ app.get('/api/movies/:movieId', async (req, res) => {
         
         db.query(rquery, function(error, reviewData) {
           reviews = reviewData
-          //console.log("Found reviews")
-          res.json({movie, reviews, cast});
         })
+
+        tquery = `SELECT * FROM movie_soundtrack WHERE movie_soundtrack.MID = "${movieId}" `;
+        db.query(tquery, function(error, soundtrackData) {
+          ost = soundtrackData
+        })
+
+        squery =  `SELECT * FROM screening WHERE screening.MID = "${movieId}" `;
+        db.query(squery, function(error, shData) {
+          shows = shData
+          res.json({movie, reviews, cast, ost, shows});
+        })
+
       }
     });
   });
+app.post('/api/movies/:movieId/addToWatchlist/', async (req, res) => {
+  const movieId = req.params.movieId;
+  jwt.verify(token, 'secret', (err, decoded) => {
+    if (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+    const userId = decoded.userId;
+    console.log("UID: ", userId);
+    const query = "INSERT INTO user_watchlist (UID, MID) VALUES (?, ?)";
+        db.query(query, [userId, movieId], (error, result) => {
+            if (error) {
+                console.log("UID: ", userId, " and MID: ", movieId)
+                return res.status(500).json({ error: 'Error adding to watchlist' })  
+            }
+          })
+    })
+  
+})
 
 //Controller of movie review submission
 app.post('/api/movies/:movieId/submit-review', async (req, res) => {
@@ -144,6 +187,7 @@ app.post('/api/movies/:movieId/submit-review', async (req, res) => {
           })
     })
   });
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
