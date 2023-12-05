@@ -54,9 +54,8 @@ app.post('/api/login', async (req, res) => {
         { 
           const user = data[0];
               {
-                  // request.session.user_id = data[count].user_id;
                   token = jwt.sign({ userId: user.user_id, username: user.user_name }, 'secret', { expiresIn: '1h' });
-                  res.json({ token });
+                  res.json({ token, user });
               } 
         }
         else 
@@ -230,6 +229,10 @@ app.post('/api/movies/:movieId/submit-review', async (req, res) => {
           })
     })
   });
+
+app.post('/api/admin/add-movie/', async (req, res) => {
+    const movieId = req.params.movieId;
+  })
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
