@@ -372,17 +372,25 @@ app.post('/api/admin/add-showtime', async (req, res) => {
     }
   })
 })
+app.get('/api/awards/:actorId', async (req, res) => {
+  actorId = req.params.actorId
+  query = `SELECT * FROM crew_awards WHERE CID = "${actorId}"`
+  db.query(query, (error, data) => { 
+    awards = data
+    res.json({awards})
+    
+  })
+})
 
 app.post('/api/admin/add-crew', async (req, res) => {
   id = Math.floor(Math.random() * ( 90000 -  10000 + 1) + 10000) + 10000
   cname = req.body.name
   bio = req.body.bio
-  education = req.body.education
+  poster = req.body.poster
   dob = req.body.dob
-  awards = req.body.awards
   
-  query = "INSERT INTO crew_actor (Name, Education, Bio, DOB, Awards, CID) VALUES (?, ?, ?, ?, ?, ?)"
-  db.query(query, [cname, education, bio, dob, awards, id], (error, result) => {
+  query = "INSERT INTO crew_actor (Name, Bio, DOB, CID, Poster_URL) VALUES (?, ?, ?, ?, ?)"
+  db.query(query, [cname, bio, dob, id, poster], (error, result) => {
     if (error){
       res.send("Error inserting data")
     }
