@@ -1,0 +1,58 @@
+/* Container for the entire movie details page */
+.movie-details-container {
+    display: flex;
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    overflow: scroll;
+    height: 610px;
+  }
+  
+
+  .movie-details-poster {
+    width: 250px; /* Adjust the size as needed */
+    height: 400px; 
+    margin-right: 20px;
+  }
+  
+  /* Container for the right side (title, summary, director) */
+  .movie-info-details {
+    flex: 1; /* Take up remaining space */
+  }
+  
+  /* Styling for title */
+  .movie-info-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Styling for summary and director */
+  .movie-info {
+    margin-bottom: 10px;
+  }
+  
+  /* Styling for the review textarea */
+  .review-textarea {
+    width: 50%; /* Take up the full width of the container */
+    height: 100px;
+    margin-bottom: 10px;
+  }
+  
+  /* Styling for the submit button */
+  .button {
+    width: 110px;
+    padding: 5px 10px; /* Adjust padding as needed */
+    font-size: 12px;
+    text-align: center;
+    background-color: #4caf50; /* Green background color */
+    color: #ffffff; /* White text color */
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  /* Center align the button */
+  .button-container {
+    text-align: left;
+  }
+  
