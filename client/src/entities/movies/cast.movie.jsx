@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 const CharList = ({ cast }) => {
   if (!cast) console.log("cast null")
   if (cast) {
-    console.log("Found cast")
     return ( 
       <div className="chars-list-container">
         <h3>Cast</h3>

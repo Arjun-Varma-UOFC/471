@@ -8,12 +8,18 @@ const ActorDetails = ({ actor }) => {
   }
 
   return actor ? (
-    <div className="actor-details-container">
-      <h2>{actor.Name}</h2>
-      <p><strong>Education:</strong> {actor.education}</p>
-      <p><strong>Date of birth:</strong> {actor.DOB}</p>
-      <p><strong>Short bio:</strong> {actor.Bio}</p>
-      <p><strong>Awards:</strong> {actor.Awards}</p>
+    <div>
+      
+      <div style={{ display: 'flex' }}>
+        <img src={actor.Poster_URL} alt="Actor" style = {{maxWidth: '150px'}} />
+      </div>
+      
+      <div style={{ marginLeft: '20px' }}>
+        <h2>{actor.Name}</h2>
+        <p><strong>Date of birth:</strong> {actor.DOB}</p>
+        <p><strong>Short bio:</strong> {actor.Bio}</p>
+      </div>  
+      
       
     </div>
   ) : (

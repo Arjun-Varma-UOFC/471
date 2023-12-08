@@ -4,6 +4,8 @@ import ActorDetails from '../entities/crew/actor.crew';
 import { useParams } from 'react-router-dom';
 import CrewReviewList from '../entities/reviews/list.crew-reviews';
 import FilmographyDetails from '../entities/movies/filmography.movies';
+import AwardDetails from '../entities/crew/awards.crew';
+import "../styles/actor.page.css"
 
 const ActorPage = () => {
   const {actorId} = useParams();
@@ -51,10 +53,14 @@ const ActorPage = () => {
   }, [actorId]);
 
   return (
-    <div>
+    <div className= "actor-page-container">
       <h1>Actor Details</h1>
-      <ActorDetails actor={actor} />
-      <FilmographyDetails actorId = {actorId}/>
+
+      <div style={{ marginLeft: '20px', display: 'flex', flexDirection: 'column' }}>
+        <ActorDetails actor={actor} />
+        <AwardDetails actorId={actorId} />
+        <FilmographyDetails actorId = {actorId}/>
+
       <label>
         Select Rating:
         <select value={rating} onChange={handleRatingChange}>
@@ -78,6 +84,7 @@ const ActorPage = () => {
           <button onClick={handleSubmit}>Submit</button>
         </div>
       )}
+       </div>
     </div>
   );
 };

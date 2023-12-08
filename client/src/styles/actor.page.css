@@ -1,0 +1,5 @@
+.actor-page-container {
+    display: flex;
+    overflow: scroll;
+    height: 680px;
+  }

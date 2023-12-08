@@ -31,9 +31,8 @@ const AdminPage = () => {
   const [crewData, setCrewData] = useState({
     name: '',
     bio: '',
-    education: '',
     dob: '',
-    awards: '',
+    poster: '',
   });
 
   const [showtimeData, setShowtimeData] = useState({
@@ -251,13 +250,6 @@ const handleClick = (formType) => {
         value={crewData.bio}
         onChange={(e) => setCrewData({ ...crewData, bio: e.target.value })}
       />
-        
-      <label>Education:</label>
-      <input
-        type="text"
-        value={crewData.education}
-        onChange={(e) => setCrewData({ ...crewData, education: e.target.value })}
-      />
 
       <label>DOB:</label>
       <input
@@ -266,11 +258,11 @@ const handleClick = (formType) => {
         onChange={(e) => setCrewData({ ...crewData, dob: e.target.value })}
       />
 
-      <label>Awards:</label>
+      <label>Poster URL:</label>
       <input
         type="text"
-        value={crewData.awards}
-        onChange={(e) => setCrewData({ ...crewData, awards: e.target.value })}
+        value={crewData.poster}
+        onChange={(e) => setCrewData({ ...crewData, poster: e.target.value })}
       />
 
       <button onClick={() => handleAddItem('add-crew', crewData)}>Submit</button>
