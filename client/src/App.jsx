@@ -7,6 +7,8 @@ import ActorPage from './pages/actor.page';
 import OSTPage from './pages/soundtrack.page'
 import UserPage from './pages/user.page';
 import AdminPage from './pages/admin.page';
+import PopularReviewPage from './pages/critic.popular-review.page';
+import YearEndPage from './pages/critic.year-end.page';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path= "/user/:userId" element={<UserPage />} />
           <Route path= "/ost/:ostId" element={<OSTPage />} />
           <Route path= "/admin" element={<AdminPage />} />
+          <Route path = "/popular-review/:userId" element = {<PopularReviewPage/>} />
+          <Route path = "yearend/:year/:userId" element = {<YearEndPage/>} />
         </Routes>
       </div>
     </Router>

@@ -15,6 +15,7 @@ const MovieDetailsPage = () => {
   const [shows, setShows] = useState([]);
   const [ost, setOst] = useState([]);
   const [reviewText, setReviewText] = useState([]);
+  const [selectedRating, setSelectedRating] = useState(null);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -38,6 +39,7 @@ const MovieDetailsPage = () => {
     fetchMovieDetails();
 
   }, [movieId]);
+  
 const addToWatchlist = async () =>{
   try {
     const response = await axios.post(`http://localhost:3001/api/movies/${movieId}/addToWatchlist/`);
@@ -51,13 +53,15 @@ const addToWatchlist = async () =>{
 const submitReview = async () => {
     try {
       const response = await axios.post(`http://localhost:3001/api/movies/${movieId}/submit-review`, {
-        reviewText: reviewText
+        reviewText: reviewText,
+        rating: selectedRating,
       });
 
       console.log("Submitted review: ", response)
 
       const updatedResponse = await axios.get(`http://localhost:3001/api/movies/${movieId}`);
       setReviews(updatedResponse.data.reviews);
+      setSelectedRating(null); //set to null after review submission
 
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -75,15 +79,32 @@ const submitReview = async () => {
           <p className="movie-info">Director: {movie.Director}</p>
           <p className="movie-info">Summary: {movie.Summary}</p>
   
-          <textarea
-            placeholder="Write your review here"
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            className="review-textarea"
-          ></textarea>
-          <button onClick={submitReview} className="button">
-            Submit Review
-          </button>
+          <select
+          value={selectedRating}
+          onChange={(e) => setSelectedRating(e.target.value)}
+          className="rating-dropdown"
+        >
+          <option value="" disabled>Select Rating</option>
+          <option value="1">1 star</option>
+          <option value="2">2 stars</option>
+          <option value="3">3 stars</option>
+          <option value="4">4 stars</option>
+          <option value="5">5 stars</option>
+        </select>
+
+        {selectedRating && (
+          <>
+            <textarea
+              placeholder="Write your review here"
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              className="review-textarea"
+            ></textarea>
+            <button onClick={submitReview} className="button">
+              Submit Review
+            </button>
+          </>
+        )}
 
           <button onClick={addToWatchlist} className="button">
             Add to Watchlist

@@ -14,6 +14,7 @@ const ActorDetails = ({ actor }) => {
       <p><strong>Date of birth:</strong> {actor.DOB}</p>
       <p><strong>Short bio:</strong> {actor.Bio}</p>
       <p><strong>Awards:</strong> {actor.Awards}</p>
+      
     </div>
   ) : (
     <p>Loading actor details...</p>

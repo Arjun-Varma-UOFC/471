@@ -11,9 +11,9 @@ const CharList = ({ cast }) => {
         <h3>Cast</h3>
         <ul className="char-list">
           {cast.map((c) => (
-            <li key={c.MID} className="char-item">
+            <li key={c.Name} className="char-item">
                <Link to={`/actor/${c.CID}`} >
-                <div className="circle-icon">{c.CID}</div>
+                <div className="circle-icon">{c.Cname}</div>
                 <p>{c.Name}</p>
                 </Link>
             </li>
