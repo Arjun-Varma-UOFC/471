@@ -110,7 +110,7 @@ app.get('/api/search/:query', async (req, res) => {
   movie = null;
   crew = null;
   user = null;
-  const mquery = `SELECT * FROM movie WHERE title like "${query}" `;
+  const mquery = `SELECT * FROM movie WHERE Title like "${query}" `;
   const uquery = `SELECT * FROM user WHERE user_name like "${query}" `;
   const cquery = `SELECT * FROM crew_actor WHERE Name like "${query}" `;
 
@@ -125,7 +125,7 @@ app.get('/api/search/:query', async (req, res) => {
   db.query(cquery, function (error, data) {
     if (data.length > 0) crew = data;
   });
-
+  
   const combinedResults = [
     ...(movie ? movie.map((m) => ({ ...m, type: 'movie' })) : []),
     ...(crew ? crew.map((c) => ({ ...c, type: 'crew' })) : []),
@@ -135,7 +135,6 @@ app.get('/api/search/:query', async (req, res) => {
   res.json(combinedResults);
   res.end();
 });
-
 
 app.get('/api/ost/:ostId', async (req, res) => {
   const ostId = req.params.ostId;
@@ -165,10 +164,10 @@ app.get('/api/filmography/:crewId', async (req, res) => {
 
 // API endpoint to get movie data
 app.get('/api/movies', async (req, res) => {
-    query = 'SELECT mid, title, poster_url, year FROM movie'
+    query = 'SELECT mid, title, poster, year FROM movie'
     db.query(query, function(error, rows) {
       // Convert rows to plain JavaScript objects
-      const movies = rows.map(row => ({ id: row.mid, title: row.title, poster_url: row.poster_url, year: row.year }));
+      const movies = rows.map(row => ({ id: row.mid, title: row.title, poster_url: row.poster, year: row.year }));
       res.json(movies)
     });
   });
@@ -189,7 +188,7 @@ app.get('/api/movies/:movieId', async (req, res) => {
     cast = null;
     ost = null;
     shows = null;
-    query = `SELECT * FROM movie WHERE mid = "${movieId}" `;
+    query = `SELECT * FROM movie, crew_actor WHERE mid = "${movieId}" and crew_actor.CID = movie.Director`;
 
     db.query(query, function(error, data) {
       if (data && data.length > 0){
