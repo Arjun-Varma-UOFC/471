@@ -1,0 +1,26 @@
+.chars-list-container {
+    margin: 20px;
+}
+  
+.char-list {
+    list-style: none;
+    display: flex;
+    overflow-x: auto;  
+}
+  
+.char-item {
+    margin-right: 20px;
+}
+  
+.circle-icon {
+    width: 100px;
+    height: 40px;
+    background-color: #3498db; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; 
+    font-weight: bold;
+    margin-right: 10px; 
+}
+  

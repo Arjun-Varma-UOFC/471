@@ -1,0 +1,121 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Apple Chancery', cursive;
+  background: linear-gradient(to bottom, #ffeecc, #ccffcc);
+  overflow: hidden;
+}
+
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(to bottom, #ffeecc, #ccffcc);
+  position: relative;
+  overflow: scroll;
+}
+
+.welcome-text {
+  font-size: 36px;
+  color: #663399;
+  margin-bottom: 20px;
+}
+
+/* Subtle animation for dreamy effect */
+.welcome-container::before,
+.welcome-container::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #ffcc00;
+  border-radius: 50%;
+  opacity: 0;
+  animation: float 4s infinite ease-in-out;
+}
+
+.welcome-container::before {
+  top: 20%;
+  left: 10%;
+}
+
+.welcome-container::after {
+  top: 70%;
+  left: 80%;
+}
+
+/* Updated style for search bars */
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.search-bar-container input {
+  margin-right: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.search-bar-container button {
+  padding: 8px 16px;
+  background-color: #663399;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.index-movie-grid {
+  display: flex;
+  gap: 20px;
+}
+
+.index-movie-card {
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  height: 300px;
+}
+
+.index-movie-poster {
+  flex: 1;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 200px;
+  height: auto;
+}
+
+.index-movie-details {
+  padding: 10px;
+  text-align: center;
+  background: linear-gradient(to bottom, #ccffcc, #ffeecc);
+}
+
+h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}

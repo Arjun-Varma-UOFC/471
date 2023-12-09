@@ -1,0 +1,27 @@
+.track-list-container {
+    margin: 20px;
+}
+  
+.track-list {
+    list-style: none;
+    display: flex;
+    overflow-x: auto;  
+}
+  
+.track-item {
+    margin-right: 20px;
+}
+  
+.circle-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #3498db; 
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; 
+    font-weight: bold;
+    margin-right: 10px; 
+}
+  
