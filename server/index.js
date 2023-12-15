@@ -138,7 +138,8 @@ app.get('/api/search/:query', async (req, res) => {
 
 app.get('/api/ost/:ostId', async (req, res) => {
   const ostId = req.params.ostId;
-  const query = `SELECT * FROM movie_soundtrack WHERE ostId = "${ostId}" `;
+  const query = `SELECT * FROM movie_soundtrack, crew_actor WHERE ostId = "${ostId}" 
+  and crew_actor.CID = movie_soundtrack.CID`;
   
   db.query(query, function(error, data) {
     if (data && data.length > 0){
@@ -328,12 +329,14 @@ app.post('/api/admin/add-movie', async (req, res) => {
   summary = req.body.summary
   url = req.body.posterURL
   
-  query = "INSERT INTO movie (MID, Title, Year, Poster_URL, Summary, Director) VALUES (?, ?, ?, ?, ?, ?)"
+  query = "INSERT INTO movie (MID, Title, Year, Poster, Summary, Director) VALUES (?, ?, ?, ?, ?, ?)"
   db.query(query, [id, title, year, url, summary, director], (error, result) => {
     if (error){
       res.send("Error inserting data")
     }
     else {
+      //insert filmography and role to the director
+
       res.send("Success")
     }
   })
@@ -343,13 +346,15 @@ app.post('/api/admin/add-soundtrack', async (req, res) => {
   id = Math.floor(Math.random() * ( 90000 -  10000 + 1) + 10000) + 10000
   title = req.body.title
   mid = req.body.mid
+  composer = req.body.composer
 
-  query = "INSERT INTO movie_soundtrack (MID, Title, ostId) VALUES (?, ?, ?)"
-  db.query(query, [mid, title, id], (error, result) => {
+  query = "INSERT INTO movie_soundtrack (MID, Title, ostId, CID) VALUES (?, ?, ?, ?)"
+  db.query(query, [mid, title, id, composer], (error, result) => {
     if (error){
       res.send("Error inserting data")
     }
     else {
+      //insert into filmography of composer
       res.send("Success")
     }
   })
@@ -413,8 +418,67 @@ app.post('/api/admin/add-critic', async (req, res) => {
   })
 })
 
+app.get("/api/compatibility/:criticId", async(req, res) => {
+  criticID = req.params.criticId;
+  userID = null;
+  userReviews = null;
+  criticReviews = null;
+
+  jwt.verify(token, 'secret', (err, decoded) => {
+    if (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+    userID = decoded.userId; 
+
+    uquery = 'SELECT * FROM review WHERE UID = ?';
+    db.query(uquery, [userID], (error, data) => {
+      if (data.length > 0){
+        userReviews = data
+
+        cquery = 'SELECT * FROM review WHERE UID = ?';
+        db.query(cquery, [criticID], (error, cdata) => {
+          if (cdata.length > 0) {
+            criticReviews = cdata
+            const commonMovies = userReviews.filter(userReview =>
+              criticReviews.some(criticReview => criticReview.MID === userReview.MID)
+            );
+        
+            // Calculate compatibility with ratings
+            const similarRatingsCount = commonMovies.reduce((count, movie) => {
+              const ratingDifference = Math.abs(movie.rating - criticReviews.find(criticReview => criticReview.MID === movie.MID).rating);
+              if (ratingDifference <= 1) { // Adjust the threshold as needed
+                return count + 1;
+              }
+              return count;
+            }, 0);
+        
+            const totalMoviesCount = [...userReviews, ...criticReviews].reduce((count, movie) => {
+              if (!count[movie.MID]) {
+                count[movie.MID] = true;
+                return count + 1;
+              }
+              return count;
+            }, 0);
+        
+            const compatibility = totalMoviesCount === 0 ? 0 : similarRatingsCount * 100 / totalMoviesCount;
+        
+            res.json({compatibility})
+          }
+          else {
+            console.log("HERE2")
+            res.send("Can't find compatibility")}
+        })
+      } else {
+        console.log("HERE1") 
+        res.send("Can't find compatibility")}
+     
+    })  
+  })    
+}) 
+
 app.get("/api/admin/reviews", async(req, res) => {
-  query = `SELECT * FROM review WHERE approved = 0`
+  query = `SELECT * FROM review, user, movie WHERE approved = 0 and review.UID = user.user_id
+  and review.MID = movie.MID`
   db.query(query, (error, result) => {
     res.json(result);
   })
@@ -459,12 +523,37 @@ app.get("/api/follow/:criticId", async (req, res) => {
     uId = decoded.userId;   
   })
  
-  const query = 'INSERT INTO network (UID, Following_UID) VALUES (?, ?)';
+  const query = 'INSERT INTO network (UserID, Following_UID) VALUES (?, ?)';
   db.query(query, [uId, criticId], (error, result) => {
     res.json(result)
     if (error)(console.log(error))
-});
+  });
 })
+
+app.get("/api/network-reviews", async (req, res) => {
+  uId = null;
+  
+  jwt.verify(token, 'secret', (err, decoded) => {
+    if (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+    uId = decoded.userId;   
+  })
+  reviews = null;
+  crewReviews = null;
+  query = "Select * from review, movie, user, network where user.user_id = review.UID and movie.MID = review.MID and network.Following_UID = review.UID and network.UserID = ?";
+  db.query(query, [uId], (error, reviewRes) => {
+    reviews = reviewRes;
+    query = "Select * from review_crew, network where network.Following_UID = review_crew.UID and network.UserID = ?";
+    db.query(query, [uId], (error, cReviewRes) => {
+      crewReviews = cReviewRes;
+      res.json({reviews, crewReviews})    
+      if (error)(console.log(error))
+      });
+    if (error)(console.log(error))
+  });
+})
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
