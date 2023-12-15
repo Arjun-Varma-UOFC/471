@@ -1,0 +1,20 @@
+/* Add this style for the like button within the review list */
+.review-list-container button.like-button {
+    background-color: #663399;
+    color: #fff;
+    border: none;
+    border-radius: 5px; 
+    width: 50px; 
+    height: 25px;
+    cursor: pointer;
+    margin-top: 5px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px; 
+  }
+  
+  .review-list-container span {
+    margin-left: 5px; /* Adjusted margin for better spacing */
+  }
+  

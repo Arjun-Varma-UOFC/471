@@ -8,6 +8,16 @@ const CriticDetails = ({ userId, reviews }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [year, setYear] = useState('')
   const [isFollowing, setIsFollowing] = useState(false);
+  const [compatibility, setCompatibility] = useState(null);
+
+  const fetchCompatibility = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/api/compatibility/${userId}`);
+      setCompatibility(response.data.compatibility);
+    } catch (error) {
+      console.error('Error fetching compatibility:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchCriticDetails = async () => {
@@ -69,6 +79,15 @@ const CriticDetails = ({ userId, reviews }) => {
     <div className="critic-details-container">
       <h2>Name: {critic?.Name}</h2>
       <h2>Company: {critic?.Company}</h2>
+      <button onClick={fetchCompatibility}>View Compatibility</button>
+
+        {/* Display Compatibility */}
+        {compatibility !== null && (
+          <div>
+            <h3>Compatibility: {compatibility}</h3>
+          </div>
+        )}
+        
       <Link to={`/popular-review/${critic?.UID}`}>
         <button>View Popular Review</button>
       </Link>

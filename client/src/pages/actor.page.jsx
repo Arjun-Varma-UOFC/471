@@ -54,7 +54,7 @@ const ActorPage = () => {
 
   return (
     <div className= "actor-page-container">
-      <h1>Actor Details</h1>
+      <h1>Crew Details</h1>
 
       <div style={{ marginLeft: '20px', display: 'flex', flexDirection: 'column' }}>
         <ActorDetails actor={actor} />

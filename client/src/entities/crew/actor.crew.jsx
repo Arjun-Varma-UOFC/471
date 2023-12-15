@@ -1,7 +1,7 @@
 import React from 'react';
 //import "../styles/actor-details.css"; 
 
-const ActorDetails = ({ actor }) => {
+const CrewDetails = ({ actor }) => {
   if (!actor) console.log("Actor data is null");
   else{
     console.log(actor)
@@ -23,8 +23,8 @@ const ActorDetails = ({ actor }) => {
       
     </div>
   ) : (
-    <p>Loading actor details...</p>
+    <p>Loading crew details...</p>
   );
 };
 
-export default ActorDetails;
+export default CrewDetails;

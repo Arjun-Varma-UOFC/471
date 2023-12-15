@@ -3,7 +3,7 @@ body {
   padding: 0;
   font-family: 'Apple Chancery', cursive;
   background: linear-gradient(to bottom, #ffeecc, #ccffcc);
-  overflow: hidden;
+  overflow: scroll;
 }
 
 .welcome-container {
@@ -11,10 +11,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   background: linear-gradient(to bottom, #ffeecc, #ccffcc);
-  position: relative;
-  overflow: scroll;
 }
 
 .welcome-text {
@@ -71,7 +68,9 @@ body {
 
 .index-movie-grid {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
+  justify-content: center; /* Center the movie grid */
 }
 
 .index-movie-card {
@@ -109,6 +108,30 @@ p {
   margin: 5px 0;
   font-size: 14px;
   color: #333;
+}
+
+/* Navigation Arrows */
+.navigation-arrows {
+  display: flex;
+  justify-content: space-between;
+  top: 85%;
+  position: absolute;
+  width: 100%;
+}
+
+.navigation-arrows button {
+  background: transparent;
+  color: #999; /* Clear-gray colorish */
+  border: none;
+  cursor: pointer;
+}
+
+.navigation-arrows .left-arrow {
+  margin-left: 0px; /* Adjust the margin to move the left arrow towards the left */
+}
+
+.navigation-arrows .right-arrow {
+  margin-right: 0px; /* Adjust the margin to move the right arrow towards the right */
 }
 
 @keyframes float {

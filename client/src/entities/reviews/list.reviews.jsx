@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import "../layout/list.review.css"
 
 const ReviewList = ({ reviews }) => {
   const approvedReviews = Array.isArray(reviews) ? reviews.filter((review) => review.approved === 1) : [];
@@ -51,7 +52,8 @@ const ReviewList = ({ reviews }) => {
                   {review.user_name} gives <i><strong>{review.rating}</strong> stars</i>: {review.Description}
                 </p>
               </Link>
-              <button onClick={() => handleLike(review.RID, index)} disabled={disabledButtonsMap[review.RID]}>
+              <button className = "like-button"
+               onClick={() => handleLike(review.RID, index)} disabled={disabledButtonsMap[review.RID]}>
                 Like
               </button>
               <span>Likes: {review.popularity}</span>

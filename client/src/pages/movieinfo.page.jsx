@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ReviewList from '../entities/reviews/list.reviews';
 import CharList from '../entities/movies/cast.movie';
 import OSTList from '../entities/movies/ost.movie';
@@ -72,11 +73,13 @@ const submitReview = async () => {
     <div>
       {movie ? (
         <div className="movie-details-container">
-        <img src={movie.Poster_URL} alt={movie.Title} className="movie-details-poster" />
+        <img src={movie.Poster} alt={movie.Title} className="movie-details-poster" />
   
         <div className="movie-info-details">
           <h2 className="movie-info-title">{movie.Title}</h2>
-          <p className="movie-info">Director: {movie.Director}</p>
+          <Link to={`/actor/${movie.Director}`}>
+            <p className="movie-info">Director: {movie.Name} </p>
+          </Link>
           <p className="movie-info">Summary: {movie.Summary}</p>
   
           <select

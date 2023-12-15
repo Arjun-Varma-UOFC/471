@@ -22,6 +22,7 @@ const AdminPage = () => {
   const [soundtrackData, setSoundtrackData] = useState({
     mid: '',
     title: '',
+    composer: '',
   });
 
   const [criticData, setCriticData] = useState({
@@ -218,6 +219,13 @@ const handleClick = (formType) => {
             onChange={(e) => setSoundtrackData({ ...soundtrackData, title: e.target.value })}
           />
 
+          <label>Composer Id:</label>
+          <input
+            type="text"
+            value={soundtrackData.composer}
+            onChange={(e) => setSoundtrackData({ ...soundtrackData, composer: e.target.value })}
+          />
+
           <button onClick={() => handleAddItem('add-soundtrack')}>Submit</button>
         </div>
       )}
@@ -305,8 +313,8 @@ const handleClick = (formType) => {
     {showReviewMonitor && (
       reviews.map((review) => (
         <div key={review.RID}>
-          <p>Username: {review.UID}</p>
-          <p>Movie title: {review.MID}</p>
+          <p>Username: {review.user_name}</p>
+          <p>Movie title: {review.Title}</p>
           <p>Description: {review.Description}</p>
           <button onClick={() => handleApproveReview(review.RID)}>Approve</button>
           <button onClick={() => handleRejectReview(review.RID)}>Reject</button>
