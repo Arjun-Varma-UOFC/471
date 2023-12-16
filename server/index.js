@@ -149,6 +149,31 @@ app.get('/api/ost/:ostId', async (req, res) => {
   });
 });
 
+app.get('/api/studio/:studioId', async (req, res) => {
+  const sId = req.params.studioId;
+  const query = `SELECT * FROM studio WHERE SID = "${sId}"`;
+  
+  db.query(query, function(error, data) {
+    if (data && data.length > 0){
+      studio = data[0];
+      res.json({ studio });
+    }
+  });
+});
+
+app.get('/api/studio-films/:studioId', async (req, res) => {
+  const sId = req.params.studioId;
+  const query = `SELECT * FROM studio_pictures, movie WHERE SID = "${sId}"
+  and movie.MID = studio_pictures.PId`;
+  
+  db.query(query, function(error, data) {
+    if (data && data.length > 0){
+      films = data;
+      res.json({ films });
+    }
+  });
+});
+
 app.get('/api/filmography/:crewId', async (req, res) => {
   const crewId = req.params.crewId;
   const query = `SELECT * FROM crew_filmography, movie WHERE movie.MID = crew_filmography.MID
@@ -189,6 +214,7 @@ app.get('/api/movies/:movieId', async (req, res) => {
     cast = null;
     ost = null;
     shows = null;
+    studios = null;
     query = `SELECT * FROM movie, crew_actor WHERE mid = "${movieId}" and crew_actor.CID = movie.Director`;
 
     db.query(query, function(error, data) {
@@ -214,10 +240,16 @@ app.get('/api/movies/:movieId', async (req, res) => {
           ost = soundtrackData
         })
 
+        stdquery = `SELECT * FROM studio, studio_pictures WHERE studio_pictures.PId = "${movieId}" 
+        and studio_pictures.SID = studio.SID`;
+        db.query(stdquery, function(error, stdData) {
+          studios = stdData
+        })
+
         squery =  `SELECT * FROM screening WHERE screening.MID = "${movieId}" `;
         db.query(squery, function(error, shData) {
           shows = shData
-          res.json({movie, reviews, cast, ost, shows});
+          res.json({movie, reviews, cast, ost, shows, studios});
           
         })
 
@@ -335,8 +367,10 @@ app.post('/api/admin/add-movie', async (req, res) => {
       res.send("Error inserting data")
     }
     else {
-      //insert filmography and role to the director
-
+      query = "INSERT INTO crew_filmography (CID, MID, Role) VALUES (?, ?, ?)"
+      db.query(query, [director, id, "Director"], (error, result) => {
+        if (error)res.send("Uh oh uh oh uh oh oh no no")
+      })
       res.send("Success")
     }
   })
