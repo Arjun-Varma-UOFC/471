@@ -9,6 +9,7 @@ import UserPage from './pages/user.page';
 import AdminPage from './pages/admin.page';
 import PopularReviewPage from './pages/critic.popular-review.page';
 import YearEndPage from './pages/critic.year-end.page';
+import StudioPage from './pages/studio.page';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path= "/admin" element={<AdminPage />} />
           <Route path = "/popular-review/:userId" element = {<PopularReviewPage/>} />
           <Route path = "yearend/:year/:userId" element = {<YearEndPage/>} />
+          <Route path = "/studio/:studioId" element = {<StudioPage/>}/>
         </Routes>
       </div>
     </Router>

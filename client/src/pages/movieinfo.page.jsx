@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ReviewList from '../entities/reviews/list.reviews';
-import CharList from '../entities/movies/cast.movie';
+import CharList from '../entities/character/cast.movie';
 import OSTList from '../entities/movies/ost.movie';
-import Screenings from '../entities/movies/screening.movie';
+import Screenings from '../entities/screening/screening.movie';
+import StudioList from '../entities/studio/studio.list';
 import axios from 'axios';
 import "../styles/movieinfo.page.css"
 
@@ -15,6 +16,7 @@ const MovieDetailsPage = () => {
   const [cast, setCast] = useState({});
   const [shows, setShows] = useState([]);
   const [ost, setOst] = useState([]);
+  const [studios, setStudios] = useState([]);
   const [reviewText, setReviewText] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
 
@@ -22,13 +24,14 @@ const MovieDetailsPage = () => {
     const fetchMovieDetails = async () => {
       try {
         const response = await axios.get(`http://localhost:3001/api/movies/${movieId}`);
-        console.log('API screening data:', response.data.shows);
+        console.log('API studios data:', response.data.studios);
 
         setReviews(response.data.reviews)
         setCast(response.data.cast)
         setMovie(response.data.movie);
         setOst(response.data.ost);
         setShows(response.data.shows)
+        setStudios(response.data.studios)
 
       } catch (error) {
         console.error('Error fetching movie details:', error);
@@ -115,6 +118,7 @@ const submitReview = async () => {
 
           <ReviewList reviews={reviews} />
           <CharList cast = {cast} />
+          <StudioList studios={studios}/>
           <OSTList ost = {ost} />
           <Screenings shows = {shows} />
         </div>

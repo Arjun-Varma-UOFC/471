@@ -3,7 +3,7 @@ import axios from 'axios';
 import ActorDetails from '../entities/crew/actor.crew';
 import { useParams } from 'react-router-dom';
 import CrewReviewList from '../entities/reviews/list.crew-reviews';
-import FilmographyDetails from '../entities/movies/filmography.movies';
+import FilmographyDetails from "../entities/crew/filmography.crew"
 import AwardDetails from '../entities/crew/awards.crew';
 import "../styles/actor.page.css"
 

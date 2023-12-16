@@ -1,6 +1,6 @@
 import React from 'react';
 import ReviewList from '../reviews/list.reviews';
-import CriticDetails from '../../critic/critic_info';
+import CriticDetails from '../critic/critic_info';
 
 const UserDetails = ({ user, reviews }) => {
   if (!user) {
