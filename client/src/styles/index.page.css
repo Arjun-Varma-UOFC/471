@@ -134,6 +134,21 @@ p {
   margin-right: 0px; /* Adjust the margin to move the right arrow towards the right */
 }
 
+
+/* styles.css */
+.top-right-buttons {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.top-right-buttons a {
+  text-decoration: none;
+  color: #333; /* Adjust the color as needed */
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0);

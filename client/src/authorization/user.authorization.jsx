@@ -1,45 +1,53 @@
-// src/components/UserAuth.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate} from 'react-router-dom';
-import "../styles/user.authorization.css"
+import { useNavigate } from 'react-router-dom';
+import "../styles/user.authorization.css";
 
 const UserAuth = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  // Retrieve token from localStorage on component mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem('authToken');
+    if (storedToken) {
+      // You may want to validate the token here if needed
+      navigate('/movies');
+    }
+  }, [navigate]);
 
   const handleRegister = async () => {
     try {
       await axios.post('http://localhost:3001/api/register', { username, password });
-
     } catch (error) {
       console.error('Error registering user:', error);
-    } 
-  };   
+    }
+  };
 
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:3001/api/login', { username, password });
       const token = response.data.token;
       const user = response.data.user;
-      if (token){
+      
+      if (token) {
         console.log('Login successful!');
         console.log("user passed: " + response.data.token);
-        if (user.admin){
-          console.log("YOU ARE THE ADMIN BABY")
-          navigate('/admin') //redirect admin to a different page
-        }
-        else {
-          // Redirect to the welcome page after successful login
+
+        // Store the token in localStorage
+        localStorage.setItem('authToken', token);
+
+        if (user.admin) {
+          console.log("YOU ARE THE ADMIN BABY");
+          navigate('/admin');
+        } else {
           navigate('/movies');
         }
-        
       } else {
-        console.log("Wrong username or password")
+        console.log("Wrong username or password");
       }
-
-    } catch (error) { 
+    } catch (error) {
       console.error('Error logging in:', error);
     }
   };

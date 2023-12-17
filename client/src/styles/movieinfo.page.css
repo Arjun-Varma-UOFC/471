@@ -3,8 +3,6 @@
     display: flex;
     background-color: #ffffff; /* White background */
     padding: 20px;
-    overflow: scroll;
-    height: 610px;
   }
   
 

@@ -52,6 +52,11 @@ const WelcomePage = () => {
     setCurrentIndex(0); // Reset index when search query changes
   }, [searchQuery, movies]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+  };
+
+
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 4 < visibleMovies.length ? prevIndex + 4 : prevIndex));
   };
@@ -62,6 +67,13 @@ const WelcomePage = () => {
 
   return (
     <div className="welcome-container">
+       <div className="top-right-buttons">
+          <Link to="/watchlist">My Watchlist</Link>
+          <Link to= "/">
+            <button onClick = {() => handleLogout()}>Logout</button>
+          </Link>
+      </div>
+
       <h2 className="welcome-text">Welcome to MovieLand!</h2>
 
       {/* Add Search Bar */}

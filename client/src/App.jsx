@@ -10,6 +10,7 @@ import AdminPage from './pages/admin.page';
 import PopularReviewPage from './pages/critic.popular-review.page';
 import YearEndPage from './pages/critic.year-end.page';
 import StudioPage from './pages/studio.page';
+import WatchlistPage from './pages/watchlist.page';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path = "/popular-review/:userId" element = {<PopularReviewPage/>} />
           <Route path = "yearend/:year/:userId" element = {<YearEndPage/>} />
           <Route path = "/studio/:studioId" element = {<StudioPage/>}/>
+          <Route path = "/watchlist" element = {<WatchlistPage/>}/>
         </Routes>
       </div>
     </Router>
