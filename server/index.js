@@ -40,7 +40,7 @@ app.post('/api/register', async (req, res) => {
             res.redirect("/");
         }
     });
-});
+}); 
 
 app.post('/api/login', async (req, res) => {
     username = req.body.username;
@@ -187,6 +187,19 @@ app.get('/api/filmography/:crewId', async (req, res) => {
   });
 });
 
+app.get('/api/watchlist', async(req, res) => {
+  jwt.verify(token, 'secret', (err, decoded) => {
+    if (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+    const userId = decoded.userId;
+    query = 'SELECT * FROM user_watchlist, movie where movie.MID = user_watchlist.MID and user_watchlist.UID =?'
+    db.query(query, [userId], function(error, movies) {
+      res.json(movies)  
+    })
+  })
+
+})
 
 // API endpoint to get movie data
 app.get('/api/movies', async (req, res) => {
