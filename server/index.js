@@ -58,7 +58,7 @@ app.post('/api/login', async (req, res) => {
                   res.json({ token, user });
               } 
         }
-        else 
+        else  
         { 
           console.log("Incorrect username or password");
         }
@@ -100,7 +100,7 @@ app.get('/api/user/:userId', async (req, res) => {
   db.query(rquery, function(error, rData) {
     if (rData && rData.length > 0){
       reviews = rData;
-      res.json({ userInfo, reviews });
+      res.json({ userInfo, reviews});
     }
   });
 });
@@ -213,11 +213,21 @@ app.get('/api/movies', async (req, res) => {
 
 app.get('/api/critic/:userId', async (req, res) => {
   cid = req.params.userId
-  query = `SELECT * from critic where UID = ${cid}`
+ 
+  userId = null;
+  jwt.verify(token, 'secret', (err, decoded) => {
+    if (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+    userId = decoded.userId; 
+    query = `SELECT * from critic, network where UserID = ${userId} and Following_UID = ${cid} 
+    and UID = ${cid}` 
     db.query(query, function(error, cData) {
       critic = cData[0]
+
       res.json({critic})
-    })
+    }) 
+  })
 })
  
 
@@ -454,9 +464,9 @@ app.post('/api/admin/add-crew', async (req, res) => {
 app.post('/api/admin/add-critic', async (req, res) => {
   uid = req.body.userId
 
-  query = `UPDATE user SET critic = '1' WHERE user_id = "${uid}"`
+  query = `UPDATE user SET critic = '1' WHERE user_name = "${uid}"`
   db.query(query, (error, result) => {
-    if (error){
+    if (error){  
       res.send("Error changing data")
     }
     else {
@@ -466,7 +476,7 @@ app.post('/api/admin/add-critic', async (req, res) => {
 })
 
 app.get("/api/compatibility/:criticId", async(req, res) => {
-  criticID = req.params.criticId;
+  criticID = req.params.criticId; 
   userID = null;
   userReviews = null;
   criticReviews = null;
@@ -535,7 +545,7 @@ app.put("/api/admin/approve-review/:reviewId", async(req, res) => {
   reviewId = req.params.reviewId;
   query = `UPDATE review SET approved = '1' WHERE RID = "${reviewId}"`
   db.query(query, (error, result) => {
-    res.json(result);
+    res.json(result); 
   })
 })
 
@@ -549,10 +559,10 @@ app.put("/api/admin/reject-review/:reviewId", async(req, res) => {
 
 app.get('/api/movie-name/:movieId', async (req, res) => {
   const movieId = req.params.movieId;
-  const query = 'SELECT title FROM movie WHERE mid = ?';
+  const query = 'SELECT Title FROM movie WHERE MID = ?';
   db.query(query, [movieId], (error, results) => {
       if (results.length > 0) {
-        const movieTitle = results[0].title;
+        const movieTitle = results[0].Title;
         res.json({ title: movieTitle });
       } else {
         res.status(404).json({ error: 'Movie not found' });
@@ -581,7 +591,7 @@ app.get("/api/network-reviews", async (req, res) => {
   uId = null;
   
   jwt.verify(token, 'secret', (err, decoded) => {
-    if (err) {
+    if (err) { 
         return res.status(401).json({ error: 'Invalid token' });
     }
     uId = decoded.userId;   
