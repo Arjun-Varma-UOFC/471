@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const MovieCard = ({ movie }) => (
+  <div>
     <Link to={`/movies/${movie.MID}`} key={movie.MID}>
       <div className="index-movie-card">
         <img src={movie.Poster} alt={movie.Title} className="index-movie-poster" />
@@ -12,6 +13,7 @@ const MovieCard = ({ movie }) => (
         </div>
       </div>
     </Link>
+  </div>
   );
 
 const WatchlistPage = () => {
@@ -33,11 +35,13 @@ const WatchlistPage = () => {
   return (
     <div>
       <h2>Your Watchlist: </h2>
-      {movies.map((movie) => (
-       <div key={movie.MID} className="index-movie-card">
-         <MovieCard movie={movie} />
-     </div>
-      ))}
+        <div className ="index-movie-grid">
+          {movies.map((movie) => (
+          <div key={movie.MID} className="index-movie-card">
+            <MovieCard movie={movie} />
+          </div>
+          ))}
+        </div>
     </div>
   );
 };

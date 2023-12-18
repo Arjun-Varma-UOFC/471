@@ -24,7 +24,7 @@ const StudioPage = () => {
 
   return (
     <div>
-      <h1>OST Details</h1>
+      <h1>Studio Details</h1>
       <StudioDetails studio={studio} />
       <StudioProductions studioId={studioId} />
     </div>

@@ -24,6 +24,7 @@ const CriticDetails = ({ userId, reviews }) => {
       try {
         const response = await axios.get(`http://localhost:3001/api/critic/${userId}`);
         setCritic(response.data.critic);
+        setIsFollowing(response.data.critic.Following_UID)
       } catch (error) {
         console.error('Error fetching critic details:', error);
       }
@@ -114,7 +115,7 @@ const CriticDetails = ({ userId, reviews }) => {
 
       {/* Add Search Bar */}
       <div className="search-bar-container">
-        <input
+        <input 
           type="text"
           placeholder="Search movies..."
           value={searchQuery}

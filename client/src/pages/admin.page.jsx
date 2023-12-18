@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import "../styles/admin.page.css"
 
 const AdminPage = () => {
@@ -10,6 +11,11 @@ const AdminPage = () => {
   const [showAddShowtimeForm, setShowAddShowtimeForm] = useState(false);
   const [showReviewMonitor, setShowReviewMonitor] = useState(false);
   const [reviews, setReviews] = useState([])
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+  };
+
 
   const [movieData, setMovieData] = useState({
     title: '',
@@ -160,6 +166,9 @@ const handleClick = (formType) => {
         <button onClick={() => handleClick('add-crew')}>Add Crew</button>
         <button onClick={() => handleClick('add-showtime')}>Add Showtime</button>
         <button onClick={() => handleClick('monitor-review')}>Monitor Reviews </button>
+        <Link to= "/">
+          <button onClick = {() => handleLogout()}>Logout</button>
+        </Link>
       </div>
       
       {showAddMovieForm && (
@@ -232,7 +241,7 @@ const handleClick = (formType) => {
 
       {showAddCriticForm && (
         <div className="form-container">
-          <label>User ID:</label>
+          <label>Username:</label>
           <input
             type="text"
             value={criticData.userId}
@@ -319,7 +328,7 @@ const handleClick = (formType) => {
           <button onClick={() => handleApproveReview(review.RID)}>Approve</button>
           <button onClick={() => handleRejectReview(review.RID)}>Reject</button>
         </div>
-        ))  
+        )) 
     )}
 
     </div>
